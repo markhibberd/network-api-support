@@ -1,5 +1,5 @@
 Name:               network-api-support
-Version:            0.0.1
+Version:            0.0.2
 License:            BSD3
 License-File:       LICENSE
 Author:             Mark Hibberd <mark@hibberd.id.au>
@@ -16,8 +16,7 @@ Description:
   .
   /Note/: This library is under heavy development, currently
   the library is functional but undocumented. Examples of use
-  can be found in the pin (https://github.com/apiengine/pin) and
-  postmark (https://github.com/apiengine/postmark) libraries.
+  can be found in the pin and postmark client libraries.
   Basically expect improvements and change.
 
 Source-Repository   head
@@ -50,4 +49,5 @@ Library
 
   Exposed-Modules:
                     Network.Api.Support
+                    Network.Api.Support.Core
 

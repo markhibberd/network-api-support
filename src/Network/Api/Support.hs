@@ -5,7 +5,7 @@
 -- Maintainer:  Mark Hibberd <mark@hibberd.id.au>
 -- Portability: portable
 --
--- Toolkit for building building http client libraries over Network.Http.Conduit"
+-- Toolkit for building http client libraries over Network.Http.Conduit
 --
 module Network.Api.Support (module X) where
 

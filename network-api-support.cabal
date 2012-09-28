@@ -12,7 +12,13 @@ Bug-reports:        https://github.com/apiengine/network-api-support/issues
 Cabal-Version:      >= 1.8
 Build-Type:         Simple
 Description:
-  network-api-support
+  Toolkit for building http client libraries over Network.Http.Conduit.
+  .
+  /Note/: This library is under heavy development, currently
+  the library is functional but undocumented. Examples of use
+  can be found in the pin (https://github.com/apiengine/pin) and
+  postmark (https://github.com/apiengine/postmark) libraries.
+  Basically expect improvements and change.
 
 Source-Repository   head
   Type:             git

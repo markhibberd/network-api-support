@@ -1,0 +1,7 @@
+:set -isrc -idist/build/autogen
+:set -Wall 
+:l Network.Api.Support
+:m + Network.Api.Support
+:set prompt ">> "
+
+

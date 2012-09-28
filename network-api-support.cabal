@@ -1,0 +1,37 @@
+Name:               network-api-support
+Version:            0.0.1
+License:            BSD3
+License-File:       LICENSE
+Author:             Mark Hibberd <mark@hibberd.id.au>
+Maintainer:         Mark Hibberd <mark@hibberd.id.au>
+Copyright:          (c) 2012 Mark Hibberd
+Synopsis:           Toolkit for building http client libraries over Network.Http.Conduit
+Category:           Network APIs
+Homepage:           https://github.com/apiengine/network-api-support
+Bug-reports:        https://github.com/apiengine/network-api-support/issues
+Cabal-Version:      >= 1.8
+Build-Type:         Simple
+Description:
+  network-api-support
+
+Source-Repository   head
+  Type:             git
+  Location:         https://github.com/apiengine/network-api-support.git
+
+Flag                small_base
+  Description:      Choose the new, split-up base package.
+
+Library
+  Build-Depends:
+                    base                            >= 3          && < 5
+
+  GHC-Options:
+                    -Wall -fno-warn-orphans
+
+  Hs-Source-Dirs:
+                    src
+
+  Exposed-Modules:
+                    Network.Api.Support
+                    Network.Api.Support.Core
+

@@ -1,0 +1,30 @@
+Name:               network-api-support-demo
+Version:            0.0.1
+License:            BSD3
+Author:             Mark Hibberd <mark@hibberd.id.au>
+Maintainer:         Mark Hibberd <mark@hibberd.id.au>
+Copyright:          Mark Hibberd
+Synopsis:           Demo package for Toolkit for building building http client libraries over Network.Http.Conduit"
+Category:           Experimental
+Description:        Demo package for Toolkit for building building http client libraries over Network.Http.Conduit"
+Homepage:           https://github.com/apiengine/network-api-support
+Cabal-Version:      >= 1.6
+Build-Type:         Simple
+
+Source-Repository   head
+  Type:             git
+  Location:         https://github.com/apiengine/network-api-support.git
+
+Flag                small_base
+  Description:      Choose the new, split-up base package.
+
+Executable          network-api-support-demo
+  Hs-Source-Dirs:
+                    ../../src .
+
+  Main-Is:
+                    Main.hs
+
+  Build-Depends:
+                   base >= 3 && < 5
+

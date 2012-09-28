@@ -31,6 +31,7 @@ Library
   Build-Depends:
                     base                            >= 3          && < 5
                     , bytestring                    >= 0.9
+                    , case-insensitive              >= 0.4
                     , certificate                   >= 1.2
                     , failure                       >= 0.2
                     , http-conduit                  >= 1.4

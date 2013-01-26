@@ -1,0 +1,8 @@
+** TODO
+* Give up on 7.2 and just use <> for monoid.
+* Cleanup and make what I have neat
+* Document
+* Release 0.0.2
+* Add support for better error handling and stacking custom
+  result types.
+* Release 0.0.3

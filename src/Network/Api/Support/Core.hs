@@ -1,74 +1,22 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts, CPP #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 module Network.Api.Support.Core (
-  RequestTransformer
-, setApiKey
-, setParams
-, setHeaders
-, setMethod
-, setBody
-, setBodyLazy
-, setJson
-, runRequest
+  runRequest
 , runRequest'
-, checkDomainOnly
-#if __GLASGOW_HASKELL__ < 704
-,  (<>)
-#endif
 ) where
+
+import Network.Api.Support.Request
 
 import Control.Failure
 import Control.Monad
 import Control.Monad.IO.Class
 import Control.Monad.Trans.Resource
 
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Char8 as B8
 import qualified Data.ByteString.Lazy as BL
-import Data.Aeson
-import Data.CaseInsensitive
-import Data.Certificate.X509 (X509)
 import Data.Text
 import Data.Monoid
 
 import Network.HTTP.Conduit
 import Network.HTTP.Types
-import Network.TLS (TLSCertificateUsage)
-import Network.TLS.Extra (certificateVerifyDomain)
-
--- * Request transformers
-
--- | A RequestTransformer allows you to build up attributes on the request.
--- | RequestTransformer is simply an Endo, and therefore has a Monoid, so
--- | can be combined with `<>`.
-type RequestTransformer m = Endo (Request (ResourceT m))
-
--- | Set an api key for use with basic auth.
-setApiKey :: B.ByteString -> RequestTransformer m
-setApiKey key = Endo $ applyBasicAuth key ""
-
--- | Set request query parameters.
-setParams :: Monad m => [(B.ByteString, B.ByteString)] -> RequestTransformer m
-setParams params = Endo $ urlEncodedBody params
-
--- | Set request headers.
-setHeaders :: [(CI B.ByteString, B.ByteString)] -> RequestTransformer m
-setHeaders m = Endo $ \r -> r { requestHeaders = m }
-
--- | Set the request method to be the specified name.
-setMethod :: B.ByteString -> RequestTransformer m
-setMethod m = Endo $ \r -> r { method = m }
-
--- | Set the request body from the specified byte string.
-setBody :: B.ByteString -> RequestTransformer m
-setBody b = Endo $ \r -> r { requestBody = RequestBodyBS b }
-
--- | Set the request body from the specified lazy byte string.
-setBodyLazy :: BL.ByteString -> RequestTransformer m
-setBodyLazy b = Endo $ \r -> r { requestBody = RequestBodyLBS b }
-
--- | Set the request body from the value which can be converted to JSON.
-setJson :: ToJSON a => a -> RequestTransformer m
-setJson = setBodyLazy . encode . toJSON
 
 -- * Request runners
 
@@ -98,26 +46,6 @@ runRequest' settings url transform responder =
   do url' <- parseUrl $ unpack url
      let url'' = url' { checkStatus = const . const $ Nothing } -- handle all response codes.
      liftM responder . withCustomManager settings . httpLbs $ appEndo transform url''
-
--- * Manager tools
-
--- | A TLS validator that checks the domain only. Note that this means the validator
--- | will not check the cert chain, and can be used on systems where Data.Certificate.X509
--- | falls over as it does not have access to local root certs.
--- |
--- | ! Use with caution !
-checkDomainOnly :: B8.ByteString -> [X509] -> IO TLSCertificateUsage
-checkDomainOnly host' certs = return $ certificateVerifyDomain (B8.unpack host') certs
-
--- * Compatability
-
-#if __GLASGOW_HASKELL__ < 704
-infixr 5 <>
-(<>) :: Monoid m => m -> m -> m
-(<>) = mappend
-#endif
-
--- Un-exposed tools --
 
 -- Build a custom connection manager and run ResourceT against that connection manager.
 -- This function is responsible for ensuring manager is always closed.

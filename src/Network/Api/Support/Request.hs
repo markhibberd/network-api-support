@@ -4,6 +4,9 @@ module Network.Api.Support.Request (
 , setApiKey
 , setParams
 , setHeaders
+, setHeader
+, addHeader
+, stripHeader
 , setMethod
 , setBody
 , setBodyLazy

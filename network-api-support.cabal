@@ -30,6 +30,7 @@ Library
   Build-Depends:
                     base                            >= 3          && < 5
                     , aeson                         >= 0.5
+                    , attoparsec                    >= 0.10
                     , bytestring                    >= 0.9
                     , case-insensitive              >= 0.4
                     , certificate                   >= 1.2
@@ -52,4 +53,5 @@ Library
                     Network.Api.Support
                     Network.Api.Support.Core
                     Network.Api.Support.Request
+                    Network.Api.Support.Response
                     Network.Api.Support.Security

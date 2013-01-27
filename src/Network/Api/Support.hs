@@ -11,4 +11,5 @@ module Network.Api.Support (module X) where
 
 import Network.Api.Support.Core as X
 import Network.Api.Support.Request as X
+import Network.Api.Support.Response as X
 import Network.Api.Support.Security as X

@@ -51,3 +51,5 @@ Library
   Exposed-Modules:
                     Network.Api.Support
                     Network.Api.Support.Core
+                    Network.Api.Support.Request
+                    Network.Api.Support.Security

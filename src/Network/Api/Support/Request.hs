@@ -38,7 +38,21 @@ setParams params = Endo $ urlEncodedBody params
 
 -- | Set request headers.
 setHeaders :: [(CI B.ByteString, B.ByteString)] -> RequestTransformer m
-setHeaders m = Endo $ \r -> r { requestHeaders = m }
+setHeaders hs = Endo $ \r -> r { requestHeaders = hs }
+
+-- | Set a request headers.
+setHeader :: (CI B.ByteString, B.ByteString) -> RequestTransformer m
+setHeader h = stripHeader (fst h) <> addHeader h
+
+-- | Add a request headers.
+addHeader :: (CI B.ByteString, B.ByteString) -> RequestTransformer m
+addHeader h = Endo $ \r -> r { requestHeaders = requestHeaders r ++ [h] }
+
+-- | Set a request headers.
+stripHeader :: CI B.ByteString -> RequestTransformer m
+stripHeader n = (Endo $ \r ->  r {
+    requestHeaders = filter (\x -> fst x == n) (requestHeaders r)
+  })
 
 -- | Set the request method to be the specified name.
 setMethod :: B.ByteString -> RequestTransformer m
@@ -54,7 +68,8 @@ setBodyLazy b = Endo $ \r -> r { requestBody = RequestBodyLBS b }
 
 -- | Set the request body from the value which can be converted to JSON.
 setJson :: ToJSON a => a -> RequestTransformer m
-setJson = setBodyLazy . encode . toJSON
+setJson v = setHeader ("Content-Type", "application/json") <>
+            (setBodyLazy . encode . toJSON $ v)
 
 -- * Compatability
 

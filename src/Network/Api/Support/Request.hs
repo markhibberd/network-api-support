@@ -56,7 +56,6 @@ setBodyLazy b = Endo $ \r -> r { requestBody = RequestBodyLBS b }
 setJson :: ToJSON a => a -> RequestTransformer m
 setJson = setBodyLazy . encode . toJSON
 
-
 -- * Compatability
 
 #if __GLASGOW_HASKELL__ < 704

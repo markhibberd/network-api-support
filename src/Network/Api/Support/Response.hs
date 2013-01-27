@@ -1,5 +1,6 @@
 module Network.Api.Support.Response (
-  JsonResult (..)
+  Responder
+, JsonResult (..)
 , parseBody
 , parseBodyWith
 , basicResponder
@@ -14,6 +15,11 @@ import Data.Text
 import Network.HTTP.Conduit
 import Network.HTTP.Types
 
+-- | Response handler.
+type Responder a =
+  Response BL.ByteString -> a
+
+-- | Wrap up json parse and decode errors.
 data JsonResult a =
   ParseError Text | DecodeError Text | JsonSuccess a deriving (Show, Eq)
 
@@ -28,6 +34,7 @@ instance Monad JsonResult where
   (DecodeError t) >>= _ = DecodeError t
   (JsonSuccess a) >>= f = f a
 
+-- | Parse and decode body handling error cases and success case.
 parseBodyWith :: FromJSON a => BL.ByteString -> (Text -> b) -> (Text -> b) -> (a -> b) -> b
 parseBodyWith body pHandler dHandler sHandler =
   case parseBody body of
@@ -35,6 +42,7 @@ parseBodyWith body pHandler dHandler sHandler =
     DecodeError t -> dHandler t
     JsonSuccess a -> sHandler a
 
+-- | Parse and decode body.
 parseBody :: FromJSON a => BL.ByteString -> JsonResult a
 parseBody body =
   case parseOnly json (B.concat . BL.toChunks $ body) of
@@ -43,6 +51,7 @@ parseBody body =
       (Error msg') -> DecodeError . pack $ msg'
       (Success a) -> JsonSuccess a
 
-basicResponder :: (Int -> BL.ByteString -> a) -> Response BL.ByteString -> a
+-- | Lift function handling status code and body into a responder.
+basicResponder :: (Int -> BL.ByteString -> a) -> Responder a
 basicResponder f (Response (Status code _) _ _ body) =
   f code body

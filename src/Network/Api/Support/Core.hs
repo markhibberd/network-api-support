@@ -5,13 +5,13 @@ module Network.Api.Support.Core (
 ) where
 
 import Network.Api.Support.Request
+import Network.Api.Support.Response
 
 import Control.Failure
 import Control.Monad
 import Control.Monad.IO.Class
 import Control.Monad.Trans.Resource
 
-import qualified Data.ByteString.Lazy as BL
 import Data.Text
 import Data.Monoid
 
@@ -27,7 +27,7 @@ runRequest ::
   -> StdMethod
   -> Text
   -> RequestTransformer m
-  -> (Response BL.ByteString -> b)
+  -> Responder b
   -> m b
 runRequest settings stdmethod url transform  =
   runRequest' settings url (transform <> setMethod (renderStdMethod stdmethod))
@@ -40,7 +40,7 @@ runRequest' ::
   ManagerSettings
   -> Text
   -> RequestTransformer m
-  -> (Response BL.ByteString -> b)
+  -> Responder b
   -> m b
 runRequest' settings url transform responder =
   do url' <- parseUrl $ unpack url

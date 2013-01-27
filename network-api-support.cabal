@@ -29,6 +29,7 @@ Flag                small_base
 Library
   Build-Depends:
                     base                            >= 3          && < 5
+                    , aeson                         >= 0.5
                     , bytestring                    >= 0.9
                     , case-insensitive              >= 0.4
                     , certificate                   >= 1.2
@@ -50,4 +51,3 @@ Library
   Exposed-Modules:
                     Network.Api.Support
                     Network.Api.Support.Core
-

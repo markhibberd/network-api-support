@@ -5,8 +5,11 @@ module Network.Api.Support.Core (
 , setParams
 , setHeaders
 , setMethod
+, setBody
+, setBodyLazy
+, setJson
 , runRequest
-, runRawRequest
+, runRequest'
 , checkDomainOnly
 #if __GLASGOW_HASKELL__ < 704
 ,  (<>)
@@ -21,6 +24,7 @@ import Control.Monad.Trans.Resource
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as B8
 import qualified Data.ByteString.Lazy as BL
+import Data.Aeson
 import Data.CaseInsensitive
 import Data.Certificate.X509 (X509)
 import Data.Text
@@ -54,8 +58,21 @@ setHeaders m = Endo $ \r -> r { requestHeaders = m }
 setMethod :: B.ByteString -> RequestTransformer m
 setMethod m = Endo $ \r -> r { method = m }
 
+-- | Set the request body from the specified byte string.
+setBody :: B.ByteString -> RequestTransformer m
+setBody b = Endo $ \r -> r { requestBody = RequestBodyBS b }
+
+-- | Set the request body from the specified lazy byte string.
+setBodyLazy :: BL.ByteString -> RequestTransformer m
+setBodyLazy b = Endo $ \r -> r { requestBody = RequestBodyLBS b }
+
+-- | Set the request body from the value which can be converted to JSON.
+setJson :: ToJSON a => a -> RequestTransformer m
+setJson = setBodyLazy . encode . toJSON
+
 -- * Request runners
 
+-- | Run a request using the specified settings, method, url and request transformer.
 runRequest ::
   (MonadIO m, MonadBaseControl IO m, MonadThrow m, MonadUnsafeIO m, Failure HttpException m) =>
   ManagerSettings
@@ -65,20 +82,22 @@ runRequest ::
   -> (Response BL.ByteString -> b)
   -> m b
 runRequest settings stdmethod url transform  =
-  runRawRequest settings url (transform <> setMethod (renderStdMethod stdmethod))
+  runRequest' settings url (transform <> setMethod (renderStdMethod stdmethod))
 
-runRawRequest ::
+-- | Run a request using the specified settings, url and request transformer. The method
+-- | can be set using the setMethod transformer. This is only useful if you require a
+-- | custom http method. Prefer runRequest where possible.
+runRequest' ::
   (MonadIO m, MonadBaseControl IO m, MonadThrow m, MonadUnsafeIO m, Failure HttpException m) =>
   ManagerSettings
   -> Text
   -> RequestTransformer m
   -> (Response BL.ByteString -> b)
   -> m b
-runRawRequest settings url transform responder =
+runRequest' settings url transform responder =
   do url' <- parseUrl $ unpack url
-     (liftM responder . withCustomManager settings . httpLbs) ((appEndo transform $ url' {
-                                                                   checkStatus = const . const $ Nothing
-      }))
+     let url'' = url' { checkStatus = const . const $ Nothing } -- handle all response codes.
+     liftM responder . withCustomManager settings . httpLbs $ appEndo transform url''
 
 -- * Manager tools
 
@@ -100,6 +119,12 @@ infixr 5 <>
 
 -- Un-exposed tools --
 
-withCustomManager :: (MonadIO m, MonadBaseControl IO m, MonadThrow m, MonadUnsafeIO m) => ManagerSettings -> (Manager -> ResourceT m a) -> m a
+-- Build a custom connection manager and run ResourceT against that connection manager.
+-- This function is responsible for ensuring manager is always closed.
+withCustomManager ::
+  (MonadIO m, MonadBaseControl IO m, MonadThrow m, MonadUnsafeIO m) =>
+  ManagerSettings ->
+  (Manager -> ResourceT m a) ->
+  m a
 withCustomManager settings f = runResourceT $
     allocate (newManager settings) closeManager >>= \(_, manager) -> f manager

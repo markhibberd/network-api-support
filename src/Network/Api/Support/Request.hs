@@ -7,6 +7,7 @@ module Network.Api.Support.Request (
 , setHeader
 , addHeader
 , stripHeader
+, setCookieJar
 , setMethod
 , setBody
 , setBodyLazy
@@ -21,6 +22,7 @@ import qualified Data.ByteString.Lazy as BL
 import Data.Aeson
 import Data.CaseInsensitive
 import Data.Monoid
+import Data.Time
 
 import Network.HTTP.Conduit
 
@@ -56,6 +58,10 @@ stripHeader :: CI B.ByteString -> RequestTransformer m
 stripHeader n = (Endo $ \r ->  r {
     requestHeaders = filter (\x -> fst x == n) (requestHeaders r)
   })
+
+-- | Register all cookies in cookie jar against request.
+setCookieJar :: CookieJar -> UTCTime -> RequestTransformer m
+setCookieJar cj now = Endo $ \r -> fst $ insertCookiesIntoRequest r cj now
 
 -- | Set the request method to be the specified name.
 setMethod :: B.ByteString -> RequestTransformer m

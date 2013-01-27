@@ -27,7 +27,7 @@ runRequest ::
   -> StdMethod
   -> Text
   -> RequestTransformer m
-  -> Responder b
+  -> Responder m b
   -> m b
 runRequest settings stdmethod url transform  =
   runRequest' settings url (transform <> setMethod (renderStdMethod stdmethod))
@@ -40,12 +40,13 @@ runRequest' ::
   ManagerSettings
   -> Text
   -> RequestTransformer m
-  -> Responder b
+  -> Responder m b
   -> m b
 runRequest' settings url transform responder =
   do url' <- parseUrl $ unpack url
      let url'' = url' { checkStatus = const . const $ Nothing } -- handle all response codes.
-     liftM responder . withCustomManager settings . httpLbs $ appEndo transform url''
+     let req = appEndo transform url''
+     liftM (responder req) . withCustomManager settings . httpLbs $ req
 
 -- Build a custom connection manager and run ResourceT against that connection manager.
 -- This function is responsible for ensuring manager is always closed.

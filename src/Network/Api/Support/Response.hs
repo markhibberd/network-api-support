@@ -6,6 +6,8 @@ module Network.Api.Support.Response (
 , basicResponder
 ) where
 
+import Control.Monad.Trans.Resource
+
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL
 import Data.Attoparsec.Lazy
@@ -16,8 +18,8 @@ import Network.HTTP.Conduit
 import Network.HTTP.Types
 
 -- | Response handler.
-type Responder a =
-  Response BL.ByteString -> a
+type Responder m a =
+  Request (ResourceT m) -> Response BL.ByteString -> a
 
 -- | Wrap up json parse and decode errors.
 data JsonResult a =
@@ -52,6 +54,6 @@ parseBody body =
       (Success a) -> JsonSuccess a
 
 -- | Lift function handling status code and body into a responder.
-basicResponder :: (Int -> BL.ByteString -> a) -> Responder a
-basicResponder f (Response (Status code _) _ _ body) =
+basicResponder :: (Int -> BL.ByteString -> a) -> Responder m a
+basicResponder f _ (Response (Status code _) _ _ body) =
   f code body

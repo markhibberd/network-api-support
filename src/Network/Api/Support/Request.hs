@@ -8,9 +8,7 @@ module Network.Api.Support.Request (
 , setBody
 , setBodyLazy
 , setJson
-#if __GLASGOW_HASKELL__ < 704
-,  (<>)
-#endif
+, (<>)
 ) where
 
 import Control.Monad.Trans.Resource

@@ -55,5 +55,4 @@ parseBody body =
 
 -- | Lift function handling status code and body into a responder.
 basicResponder :: (Int -> BL.ByteString -> a) -> Responder m a
-basicResponder f _ (Response (Status code _) _ _ body) =
-  f code body
+basicResponder f _ r = f (statusCode (responseStatus r)) (responseBody r)

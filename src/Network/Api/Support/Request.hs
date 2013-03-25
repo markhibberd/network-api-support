@@ -25,7 +25,7 @@ import Data.Monoid
 import Data.Time
 
 import Network.HTTP.Conduit
-import Network.HTTP.Conduit.Internal (insertCookiesIntoRequest)
+import Network.HTTP.Conduit.Cookie (insertCookiesIntoRequest)
 
 -- * Request transformers
 

@@ -46,14 +46,4 @@ runRequest' settings url transform responder =
   do url' <- parseUrl $ unpack url
      let url'' = url' { checkStatus = const . const . const $ Nothing } -- handle all response codes.
      let req = appEndo transform url''
-     liftM (responder req) . withCustomManager settings . httpLbs $ req
-
--- Build a custom connection manager and run ResourceT against that connection manager.
--- This function is responsible for ensuring manager is always closed.
-withCustomManager ::
-  (MonadIO m, MonadBaseControl IO m, MonadThrow m, MonadUnsafeIO m) =>
-  ManagerSettings ->
-  (Manager -> ResourceT m a) ->
-  m a
-withCustomManager settings f = runResourceT $
-    allocate (newManager settings) closeManager >>= \(_, manager) -> f manager
+     liftM (responder req) . withManagerSettings settings . httpLbs $ req

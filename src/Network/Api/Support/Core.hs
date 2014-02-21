@@ -26,8 +26,8 @@ runRequest ::
   ManagerSettings
   -> StdMethod
   -> Text
-  -> RequestTransformer m
-  -> Responder m b
+  -> RequestTransformer
+  -> Responder b
   -> m b
 runRequest settings stdmethod url transform  =
   runRequest' settings url (transform <> setMethod (renderStdMethod stdmethod))
@@ -39,8 +39,8 @@ runRequest' ::
   (MonadIO m, MonadBaseControl IO m, MonadThrow m, MonadUnsafeIO m, Failure HttpException m) =>
   ManagerSettings
   -> Text
-  -> RequestTransformer m
-  -> Responder m b
+  -> RequestTransformer
+  -> Responder b
   -> m b
 runRequest' settings url transform responder =
   do url' <- parseUrl $ unpack url

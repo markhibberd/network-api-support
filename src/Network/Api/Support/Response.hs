@@ -12,7 +12,7 @@ import Data.Attoparsec.Lazy
 import Data.Aeson
 import Data.Text
 
-import Network.HTTP.Conduit
+import Network.HTTP.Client
 import Network.HTTP.Types
 
 -- | Response handler.

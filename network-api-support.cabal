@@ -1,5 +1,5 @@
 Name:               network-api-support
-Version:            0.0.9
+Version:            0.1.0
 License:            BSD3
 License-File:       LICENSE
 Author:             Mark Hibberd <mark@hibberd.id.au>
@@ -14,10 +14,9 @@ Build-Type:         Simple
 Description:
   Toolkit for building http client libraries over Network.Http.Conduit.
   .
-  /Note/: This library is under heavy development, currently
-  the library is functional but undocumented. Examples of use
-  can be found in the pin and postmark client libraries.
-  Basically expect improvements and change.
+  /Note/: Examples of use can be found in the pin and postmark client
+  libraries.
+
 
 Source-Repository   head
   Type:             git
@@ -33,17 +32,12 @@ Library
                     , attoparsec                    >= 0.10
                     , bytestring                    >= 0.9
                     , case-insensitive              >= 0.4
-                    , certificate                   >= 1.2
-                    , failure                       >= 0.2
-                    , http-conduit                  >= 2.0.0.4
                     , http-types                    >= 0.6
-                    , http-client                   >= 0.1
-                    , resourcet                     >= 0.3
+                    , http-client                   >= 0.2.2.2
+                    , http-client-tls               >= 0.2.1.1
                     , text                          >= 0.11
                     , time                          >= 1
-                    , tls                           >= 0.9
-                    , tls-extra                     >= 0.4
-                    , transformers                  >= 0.2
+                    , tls                           >= 1.2.2
 
   GHC-Options:
                     -Wall -fno-warn-orphans
@@ -56,4 +50,3 @@ Library
                     Network.Api.Support.Core
                     Network.Api.Support.Request
                     Network.Api.Support.Response
-                    Network.Api.Support.Security

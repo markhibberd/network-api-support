@@ -22,8 +22,7 @@ import Data.CaseInsensitive
 import Data.Monoid
 import Data.Time
 
-import Network.HTTP.Conduit
-import Network.HTTP.Client (insertCookiesIntoRequest)
+import Network.HTTP.Client
 
 -- * Request transformers
 

@@ -28,6 +28,13 @@ instance Functor JsonResult where
   fmap _ (DecodeError t) = DecodeError t
   fmap f (JsonSuccess a) = JsonSuccess $ f a
 
+instance Applicative JsonResult where 
+   pure = JsonSuccess
+
+   (JsonSuccess f)   <*> m = fmap f m
+   (ParseError err)  <*> m = ParseError err
+   (DecodeError err) <*> m = DecodeError err
+
 instance Monad JsonResult where
   return = JsonSuccess
   (ParseError t) >>= _ = ParseError t

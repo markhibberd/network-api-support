@@ -2,7 +2,8 @@
 module Network.Api.Support.Request (
   RequestTransformer
 , setApiKey
-, setParams
+, setUrlEncodedBody
+, setQueryParams
 , setHeaders
 , setHeader
 , addHeader
@@ -35,9 +36,13 @@ type RequestTransformer = Endo Request
 setApiKey :: B.ByteString -> RequestTransformer
 setApiKey key = Endo $ applyBasicAuth key ""
 
+-- | Set URL encoded form params on the request body.
+setUrlEncodedBody :: [(B.ByteString, B.ByteString)] -> RequestTransformer
+setUrlEncodedBody = Endo . urlEncodedBody
+
 -- | Set request query parameters.
-setParams :: [(B.ByteString, B.ByteString)] -> RequestTransformer
-setParams params = Endo $ urlEncodedBody params
+setQueryParams :: [(B.ByteString, Maybe B.ByteString)] -> RequestTransformer
+setQueryParams = Endo . setQueryString
 
 -- | Set request headers.
 setHeaders :: [(CI B.ByteString, B.ByteString)] -> RequestTransformer

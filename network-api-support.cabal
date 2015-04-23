@@ -7,8 +7,8 @@ Maintainer:         Mark Hibberd <mark@hibberd.id.au>
 Copyright:          (c) 2012 Mark Hibberd
 Synopsis:           Toolkit for building http client libraries over Network.Http.Conduit
 Category:           Network APIs
-Homepage:           https://github.com/apiengine/network-api-support
-Bug-reports:        https://github.com/apiengine/network-api-support/issues
+Homepage:           https://github.com/markhibberd/network-api-support
+Bug-reports:        https://github.com/markhibberd/network-api-support/issues
 Cabal-Version:      >= 1.8
 Build-Type:         Simple
 Description:
@@ -20,7 +20,7 @@ Description:
 
 Source-Repository   head
   Type:             git
-  Location:         https://github.com/apiengine/network-api-support.git
+  Location:         https://github.com/markhibberd/network-api-support.git
 
 Flag                small_base
   Description:      Choose the new, split-up base package.

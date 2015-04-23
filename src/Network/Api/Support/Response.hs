@@ -6,6 +6,7 @@ module Network.Api.Support.Response (
 , basicResponder
 ) where
 
+import Control.Applicative
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL
 import Data.Attoparsec.Lazy
@@ -32,8 +33,8 @@ instance Applicative JsonResult where
    pure = JsonSuccess
 
    (JsonSuccess f)   <*> m = fmap f m
-   (ParseError err)  <*> m = ParseError err
-   (DecodeError err) <*> m = DecodeError err
+   (ParseError err)  <*> _ = ParseError err
+   (DecodeError err) <*> _ = DecodeError err
 
 instance Monad JsonResult where
   return = JsonSuccess

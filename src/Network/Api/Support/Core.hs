@@ -6,11 +6,13 @@ module Network.Api.Support.Core (
 
 import Network.Api.Support.Request
 import Network.Api.Support.Response
+import Network.Api.Support.RunRequest
 
 import Control.Monad
 
-import Data.Text
 import Data.Monoid
+
+import Data.Text
 
 import Network.HTTP.Client
 import Network.HTTP.Types
@@ -37,8 +39,9 @@ runRequest' ::
   -> RequestTransformer
   -> Responder b
   -> IO b
-runRequest' settings url transform responder =
-  do url' <- parseRequest $ unpack url
-     let req = appEndo transform url'
+runRequest' settings url transform responder = 
+  do url' <- parseRequest $ unpack url     
+     let url'' = handleAllResponseCodes url'
+     let req = appEndo transform url''
      manager <- newManager settings
      liftM (responder req) $ httpLbs req manager

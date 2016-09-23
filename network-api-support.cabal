@@ -26,7 +26,7 @@ Flag                small_base
   Description:      Choose the new, split-up base package.
 
 Flag                http_client_pre_0_5
-  Description:      User version < 0.5 of http-client
+  Description:      Use version < 0.5 of http-client
   Default:          False
 
 Library

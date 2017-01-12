@@ -32,7 +32,7 @@ Flag                http_client_pre_0_5
 Library
   Build-Depends:
                     base                          >= 3          && < 6
-                  , aeson                         >= 0.5        && < 1.1
+                  , aeson                         >= 0.5        && < 1.2
                   , attoparsec                    >= 0.10       && < 0.14
                   , bytestring                    >= 0.9.1.5    && < 0.11
                   , case-insensitive              >= 0.2        && < 1.3

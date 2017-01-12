@@ -6,6 +6,7 @@ module Network.Api.Support.Core (
 
 import Network.Api.Support.Request
 import Network.Api.Support.Response
+import Network.Api.Support.HandleCodes
 
 import Control.Monad
 
@@ -38,7 +39,8 @@ runRequest' ::
   -> Responder b
   -> IO b
 runRequest' settings url transform responder =
-  do url' <- parseUrl $ unpack url
-     let url'' = url' { checkStatus = const . const . const $ Nothing } -- handle all response codes.
+  do url' <- parseRequest $ unpack url
+     let url'' = handleAllResponseCodes url'
      let req = appEndo transform url''
-     liftM (responder req) . withManager settings . httpLbs $ req
+     manager <- newManager settings
+     liftM (responder req) $ httpLbs req manager

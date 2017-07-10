@@ -55,11 +55,18 @@ Library
   Hs-Source-Dirs:
                     src
   if flag(http_client_pre_0_5)
-    Hs-Source-Dirs: 
+    Hs-Source-Dirs:
                     http_client_pre_0_5
   else
     Hs-Source-Dirs:
                     http_client_post_0_5
+
+  if flag(http_client_pre_0_5)
+    Extra-Source-Files:
+                    http_client_post_0_5/Network/Api/Support/HandleCodes.hs
+  else
+    Extra-Source-Files:
+                    http_client_pre_0_5/Network/Api/Support/HandleCodes.hs
 
   Exposed-Modules:
                     Network.Api.Support

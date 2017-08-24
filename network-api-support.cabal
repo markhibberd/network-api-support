@@ -1,5 +1,5 @@
 Name:               network-api-support
-Version:            0.3.0
+Version:            0.3.1
 License:            BSD3
 License-File:       LICENSE
 Author:             Mark Hibberd <mark@hibberd.id.au>
@@ -29,13 +29,13 @@ Flag                small_base
 Library
   Build-Depends:
                     base                          >= 3          && < 6
-                  , aeson                         >= 0.5        && < 0.13
+                  , aeson                         >= 0.5        && < 1.1
                   , attoparsec                    >= 0.10       && < 0.14
                   , bytestring                    >= 0.9.1.5    && < 0.11
                   , case-insensitive              >= 0.2        && < 1.3
                   , http-types                    >= 0.6        && < 0.10
-                  , http-client                   >= 0.2.2.2    && < 0.5
-                  , http-client-tls               >= 0.2.1.1    && < 0.3
+                  , http-client                   >= 0.2.2.2    && < 0.6
+                  , http-client-tls               >= 0.2.1.1    && < 0.4
                   , text                          >= 0.11       && < 1.3
                   , time                          == 1.*
                   , tls                           >= 1.2.0      && < 1.4

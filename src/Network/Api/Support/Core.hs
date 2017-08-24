@@ -44,10 +44,9 @@ runRequest' settings url transform responder =
 -- Thereafter `parseRequest` can be used which does not trap any
 -- reponse codes (the required behaviour).
 #if MIN_VERSION_http_client(0,4,30)
-  do url' <- parseRequest $ unpack url
-     let url'' = url'
+  do url'' <- parseRequest $ unpack url
 #else
-  do url' <- parseUrl     $ unpack url
+  do url'  <- parseUrl     $ unpack url
      let url'' = url' { checkStatus = const . const . const $ Nothing } -- handle all response codes.
 #endif
      let req = appEndo transform url''

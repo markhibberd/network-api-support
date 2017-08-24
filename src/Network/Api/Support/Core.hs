@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts, CPP #-}
 module Network.Api.Support.Core (
   runRequest
 , runRequest'
@@ -39,6 +39,11 @@ runRequest' ::
   -> IO b
 runRequest' settings url transform responder =
   do url' <- parseRequest $ unpack url
-     let req = appEndo transform url'
+#if MIN_VERSION_http_client(0,5,0)
+     let url'' = url'
+#else
+     let url'' = url' { checkStatus = const . const . const $ Nothing } -- handle all response codes.
+#endif
+     let req = appEndo transform url''
      manager <- newManager settings
      liftM (responder req) $ httpLbs req manager

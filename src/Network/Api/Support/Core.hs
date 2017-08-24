@@ -38,10 +38,16 @@ runRequest' ::
   -> Responder b
   -> IO b
 runRequest' settings url transform responder =
+-- To achieve backwards compatibility for http-client<0.4.30
+-- parseURL needs to be used and the default `checkStatus` handler
+-- overridden to disable the trapping of non-2xx HTTP response codes.
+-- Thereafter `parseRequest` can be used which does not trap any
+-- reponse codes (the required behaviour).
+#if MIN_VERSION_http_client(0,4,30)
   do url' <- parseRequest $ unpack url
-#if MIN_VERSION_http_client(0,5,0)
      let url'' = url'
 #else
+  do url' <- parseUrl     $ unpack url
      let url'' = url' { checkStatus = const . const . const $ Nothing } -- handle all response codes.
 #endif
      let req = appEndo transform url''

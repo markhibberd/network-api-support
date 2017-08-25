@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts, CPP #-}
 module Network.Api.Support.Core (
   runRequest
 , runRequest'
@@ -38,8 +38,17 @@ runRequest' ::
   -> Responder b
   -> IO b
 runRequest' settings url transform responder =
-  do url' <- parseRequest $ unpack url
+-- To achieve backwards compatibility for http-client<0.4.30
+-- parseURL needs to be used and the default `checkStatus` handler
+-- overridden to disable the trapping of non-2xx HTTP response codes.
+-- Thereafter `parseRequest` can be used which does not trap any
+-- reponse codes (the required behaviour).
+#if MIN_VERSION_http_client(0,4,30)
+  do url'' <- parseRequest $ unpack url
+#else
+  do url'  <- parseUrl     $ unpack url
      let url'' = url' { checkStatus = const . const . const $ Nothing } -- handle all response codes.
+#endif
      let req = appEndo transform url''
      manager <- newManager settings
      liftM (responder req) $ httpLbs req manager

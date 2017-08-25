@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings, FlexibleContexts, CPP #-}
 module Network.Api.Support.Response (
   Responder
 , JsonResult (..)
@@ -5,6 +6,10 @@ module Network.Api.Support.Response (
 , parseBodyWith
 , basicResponder
 ) where
+
+#if ! MIN_VERSION_base(4,8,0)
+import Control.Applicative
+#endif
 
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL

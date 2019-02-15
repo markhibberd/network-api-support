@@ -23,9 +23,6 @@ Source-Repository   head
   Type:             git
   Location:         https://github.com/markhibberd/network-api-support.git
 
-Flag                small_base
-  Description:      Choose the new, split-up base package.
-
 Library
   Build-Depends:
                     base                          >= 3          && < 6

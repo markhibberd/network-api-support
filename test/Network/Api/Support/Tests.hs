@@ -25,5 +25,4 @@ prop_identity ::
   Int
   -> Bool
 prop_identity n =
-  bletch n == n
-
+  id n == n

@@ -49,3 +49,30 @@ Library
                     Network.Api.Support.Core
                     Network.Api.Support.Request
                     Network.Api.Support.Response
+
+Test-suite test
+  Hs-Source-Dirs:
+                    test
+
+  default-language:
+                    Haskell2010
+
+  type:
+                    exitcode-stdio-1.0
+
+  main-is:
+                    Main.hs
+
+  Ghc-Options:
+                    -O2
+                    -Wall
+                    -fhpc
+                    -fwarn-tabs
+
+  Build-Depends:
+                   base >= 3 && < 5
+                   , network-api-support
+                   , QuickCheck
+                   , test-framework
+                   , test-framework-quickcheck2
+                   , test-framework-hunit

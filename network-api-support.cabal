@@ -63,6 +63,9 @@ Test-suite test
   main-is:
                     Main.hs
 
+  other-modules:
+                    Network.Api.Support.Tests
+
   Ghc-Options:
                     -O2
                     -Wall
@@ -71,6 +74,7 @@ Test-suite test
 
   Build-Depends:
                    base >= 3 && < 5
+                   , http-client
                    , network-api-support
                    , QuickCheck
                    , test-framework

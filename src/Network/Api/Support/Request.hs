@@ -48,18 +48,18 @@ setQueryParams = Endo . setQueryString
 setHeaders :: [(CI B.ByteString, B.ByteString)] -> RequestTransformer
 setHeaders hs = Endo $ \r -> r { requestHeaders = hs }
 
--- | Set a request headers.
+-- | Set a single request header, replacing any existing headers with the same name.
 setHeader :: (CI B.ByteString, B.ByteString) -> RequestTransformer
-setHeader h = stripHeader (fst h) <> addHeader h
+setHeader h = addHeader h <> stripHeader (fst h)
 
 -- | Add a request headers.
 addHeader :: (CI B.ByteString, B.ByteString) -> RequestTransformer
 addHeader h = Endo $ \r -> r { requestHeaders = requestHeaders r ++ [h] }
 
--- | Set a request headers.
+-- | Remove all occurrences of headers with the given name.
 stripHeader :: CI B.ByteString -> RequestTransformer
 stripHeader n = (Endo $ \r ->  r {
-    requestHeaders = filter (\x -> fst x == n) (requestHeaders r)
+    requestHeaders = filter (\x -> fst x /= n) (requestHeaders r)
   })
 
 -- | Register all cookies in cookie jar against request.

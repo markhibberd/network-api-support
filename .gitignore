@@ -9,3 +9,8 @@ TAGS
 cabal.sandbox.config
 .cabal-sandbox
 .hub
+/network-api-support.cabal
+/network-api-support-test.tix
+/.stack-work
+/dist-newstyle
+

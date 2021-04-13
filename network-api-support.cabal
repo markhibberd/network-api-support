@@ -1,0 +1,68 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           network-api-support
+version:        0.3.5
+synopsis:       Toolkit for building http client libraries over Network.Http.Conduit
+description:    Toolkit for building http client libraries over Network.Http.Conduit.
+                .
+                /Note/: Examples of use can be found in the pin and postmark client libraries.
+category:       Network APIs
+homepage:       https://github.com/markhibberd/network-api-support.git#readme
+bug-reports:    https://github.com/markhibberd/network-api-support.git/issues
+author:         Mark Hibberd <mark@hibberd.id.au>
+maintainer:     Mark Hibberd <mark@hibberd.id.au>
+copyright:      (c) 2012 Mark Hibberd
+license:        BSD3
+license-file:   LICENSE
+tested-with:    ghc ==7.10.3 ghc ==8.0.2
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/markhibberd/network-api-support.git
+
+library
+  exposed-modules:
+      Network.Api.Support
+      Network.Api.Support.Core
+      Network.Api.Support.Request
+      Network.Api.Support.Response
+  other-modules:
+      Paths_network_api_support
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -fno-warn-orphans
+  build-depends:
+      aeson >=0.5 && <2
+    , attoparsec >=0.10 && <0.15
+    , base >=3 && <6
+    , bytestring >=0.9.1.5 && <0.12
+    , case-insensitive >=0.2 && <1.3
+    , http-client >=0.2.2.2 && <0.8
+    , http-types >=0.6 && <0.13
+    , text >=0.11 && <1.3
+    , time ==1.*
+  default-language: Haskell2010
+
+test-suite network-api-support-test
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Network.Api.Support.Tests
+      Paths_network_api_support
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -O2 -fhpc -fwarn-tabs
+  build-depends:
+      QuickCheck
+    , base >=3 && <5
+    , http-client
+    , network-api-support
+    , test-framework
+    , test-framework-hunit
+    , test-framework-quickcheck2
+  default-language: Haskell2010

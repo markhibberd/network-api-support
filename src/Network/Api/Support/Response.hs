@@ -44,7 +44,7 @@ instance Applicative JsonResult where
    (DecodeError err) <*> _ = DecodeError err
 
 instance Monad JsonResult where
-  return = JsonSuccess
+  return = pure
   (ParseError t) >>= _ = ParseError t
   (DecodeError t) >>= _ = DecodeError t
   (JsonSuccess a) >>= f = f a

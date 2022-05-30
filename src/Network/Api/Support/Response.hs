@@ -11,7 +11,10 @@ module Network.Api.Support.Response (
 import Control.Applicative
 #endif
 
+#if ! MIN_VERSION_attoparsec(0,14,0)
 import qualified Data.ByteString as B
+#endif
+
 import qualified Data.ByteString.Lazy as BL
 import Data.Attoparsec.Lazy
 import Data.Aeson
@@ -57,7 +60,11 @@ parseBodyWith body pHandler dHandler sHandler =
 -- | Parse and decode body.
 parseBody :: FromJSON a => BL.ByteString -> JsonResult a
 parseBody body =
+#if MIN_VERSION_attoparsec(0,14,0)
+  case parseOnly json body of
+#else
   case parseOnly json (B.concat . BL.toChunks $ body) of
+#endif
     Left msg -> ParseError . pack $ msg
     Right j -> case fromJSON j of
       (Error msg') -> DecodeError . pack $ msg'

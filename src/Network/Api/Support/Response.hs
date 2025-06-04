@@ -15,6 +15,10 @@ import Control.Applicative
 import qualified Data.ByteString as B
 #endif
 
+#if MIN_VERSION_aeson(2,2,0)
+import Data.Aeson.Parser (json)
+#endif
+
 import qualified Data.ByteString.Lazy as BL
 import Data.Attoparsec.Lazy
 import Data.Aeson
